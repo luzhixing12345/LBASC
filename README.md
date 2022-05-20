@@ -1,5 +1,7 @@
 # 编译原理学习
 
+本项目为编译原理的学习过程,作为大三下学期的一门专业课我并没有听懂老师讲课,所以打算自学.
+
 ## [通俗易懂好上手,构建一个简单的解释器(python)](https://ruslanspivak.com/lsbasi-part1/),个人强烈推荐
 
 理论与实践结合,作者每篇文章中都提供了很好的可执行示例,并在结尾要求读者完成一个进阶小任务,并且会在下一篇中公布他的思路,我很喜欢这种形式
@@ -43,6 +45,6 @@ python test.py -c part3
 
 号称用 4 个函数来实现了一个小的 C 语言编译器。它最让我震惊的是能够自举，即能自己编译自己。并且它用很少的代码就完成了一个功能相当完善的 C 语言编译器
 
-## 一些小工具
+## 写的一些小玩具
 
-- [求解FIRST集-FOLLOW集-SELECT集](some-tools/FIRST-FOLLOW-SELECT/README.md)
+- [求解FIRST集-FOLLOW集-SELECT集](TOOLS/FIRST-FOLLOW-SELECT/README.md)
