@@ -16,7 +16,7 @@ cd TOOLS/FIRST-FOLLOW-SELECT
   g++ main.cpp FFS_set.cpp -o main.exe
   ```
 
-- 如果你没有也可以直接下载我编译过的[可执行文件]()
+- 如果你没有也可以直接下载我编译过的[可执行文件](https://github.com/luzhixing12345/LBASC/releases/download/v0.0.1/main.exe)
 
 我在该文件夹下提供了一个示例文件 `grammar.txt`,执行
 
