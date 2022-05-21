@@ -45,6 +45,9 @@ void calculateFirstSet(RuleSet &rule_set, Set&first_set);
 
 void calculateFollowSet(Set&first_set, RuleSet &rule_set, Set&follow_set);
 
-void calculateSelectSet(Set&first_set, Set&follow_set, RuleSet &rule_set, std::vector<std::pair<Rule,std::set<char>>>&select_set);
+void calculateSelectSet(Set&first_set,
+                        Set&follow_set, 
+                        RuleSet &rule_set, 
+                        std::vector<std::pair<Rule,std::set<char>>>&select_set);
 
 #endif // TOOLS_FIRST_FOLLOW_SELECT_FFS_SET_H_

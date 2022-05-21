@@ -126,36 +126,36 @@ int ffs(int argc, char *argv[], FFS_set &ffs_set) {
     rule_set.terminal_set = terminal_set;
     rule_set.rules = rules;
 
-    showSet(rules, non_terminal_set, terminal_set);
+    //showSet(rules, non_terminal_set, terminal_set);
 
     // calculate first set
     calculateFirstSet(rule_set, ffs_set.first_set);
 
-    std::cout << "first set" << std::endl;
-    for (auto &it : ffs_set.first_set) {
-        std::cout << it.first << ": ";
-        for (auto &i : it.second) {
-            std:: cout<< i << " ";
-        }
-        std::cout<<std::endl;
-    }
+    // std::cout << "first set" << std::endl;
+    // for (auto &it : ffs_set.first_set) {
+    //     std::cout << it.first << ": ";
+    //     for (auto &i : it.second) {
+    //         std:: cout<< i << " ";
+    //     }
+    //     std::cout<<std::endl;
+    // }
 
     
 
     // calcualte follow set
     calculateFollowSet(ffs_set.first_set, rule_set, ffs_set.follow_set);
 
-    std::cout << "follow set" <<std::endl;
+    // std::cout << "follow set" <<std::endl;
 
-    for (auto &it : ffs_set.follow_set) {
-        std::cout << it.first << ": ";
-        for (auto &i : it.second) {
-            std:: cout<< i << " ";
-        }
-        std::cout<<std::endl;
-    }
+    // for (auto &it : ffs_set.follow_set) {
+    //     std::cout << it.first << ": ";
+    //     for (auto &i : it.second) {
+    //         std:: cout<< i << " ";
+    //     }
+    //     std::cout<<std::endl;
+    // }
     // calcualte select set
-    //calculateSelectSet(ffs_set.first_set, ffs_set.follow_set, rule_set, ffs_set.select_set);
+    calculateSelectSet(ffs_set.first_set, ffs_set.follow_set, rule_set, ffs_set.select_set);
 
     return 0;
 }
@@ -185,8 +185,11 @@ void calculateFollowSet(Set &first_set, RuleSet &rule_set, Set &follow_set) {
 
     Set temp_set = follow_set;
     for (Rule &rule : rule_set.rules) {
-        
+
         std::string production = rule.second;
+        if (production[0] == EMPTY) {
+            continue;
+        }
         for (int i = 0; i < production.size() ; i++) {
             char before = production[i];
             if (!checkTerminal(before, rule_set.non_terminal_set)) {
@@ -216,8 +219,29 @@ void calculateFollowSet(Set &first_set, RuleSet &rule_set, Set &follow_set) {
                 for (auto &it : follow_set[key]) follow_set[end].insert(it);
             }
         }
-
     }
     if (temp_set == follow_set) return;
     else calculateFollowSet(first_set, rule_set, follow_set);
+}
+
+void calculateSelectSet(Set &first_set,
+                        Set &follow_set,
+                        RuleSet &rule_set, 
+                        std::vector<std::pair<Rule,std::set<char>>> &select_set)
+{
+    for (Rule &rule : rule_set.rules) {
+        char first_char = rule.second[0];
+        if (first_char == EMPTY) {
+            char key = rule.first;
+            select_set.push_back(std::make_pair(rule, follow_set[key]));
+        } else {
+            if (checkTerminal(first_char, rule_set.non_terminal_set)) {
+                std::set<char> temp;
+                temp.insert(first_char);
+                select_set.push_back(std::make_pair(rule, temp));
+            } else {
+                select_set.push_back(std::make_pair(rule, first_set[first_char]));
+            }
+        }
+    }
 }
