@@ -1,4 +1,5 @@
-S -> Abc
-A -> DT | e
-D -> a | d
-T -> +A | *A
+E -> TP
+P -> +TP|-TP|e
+T -> FQ
+Q -> *FQ|/FQ|e
+F -> (E) | I

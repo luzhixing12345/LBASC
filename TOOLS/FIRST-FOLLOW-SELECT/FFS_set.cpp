@@ -131,17 +131,29 @@ int ffs(int argc, char *argv[], FFS_set &ffs_set) {
     // calculate first set
     calculateFirstSet(rule_set, ffs_set.first_set);
 
+    std::cout << "first set" << std::endl;
     for (auto &it : ffs_set.first_set) {
-        std::cout << it.first << ":";
+        std::cout << it.first << ": ";
         for (auto &i : it.second) {
             std:: cout<< i << " ";
         }
         std::cout<<std::endl;
     }
 
-    // calcualte follow set
-    //calculateFollowSet(ffs_set.first_set, rule_set, ffs_set.follow_set);
+    
 
+    // calcualte follow set
+    calculateFollowSet(ffs_set.first_set, rule_set, ffs_set.follow_set);
+
+    std::cout << "follow set" <<std::endl;
+
+    for (auto &it : ffs_set.follow_set) {
+        std::cout << it.first << ": ";
+        for (auto &i : it.second) {
+            std:: cout<< i << " ";
+        }
+        std::cout<<std::endl;
+    }
     // calcualte select set
     //calculateSelectSet(ffs_set.first_set, ffs_set.follow_set, rule_set, ffs_set.select_set);
 
@@ -154,21 +166,58 @@ void calculateFirstSet(RuleSet &rule_set, Set &first_set) {
     for (Rule &rule : rule_set.rules) {
         char key = rule.first;
         std::string production = rule.second;
-        if (checkTerminal(production[0], rule_set.non_terminal_set)) {
-            // add if is a terminal word
-            first_set[key].insert(production[0]);
-        } else {
-            for (char &word : production) {
-                if (checkTerminal(word, rule_set.non_terminal_set)) {
-                    first_set[key].insert(word);
-                    break;
-                } else {
-                    for (auto &it : first_set[word]) first_set[key].insert(it);
-                    if (first_set[word].count(EMPTY) == 0) break;
-                }
+        for (char &word : production) {
+            if (checkTerminal(word, rule_set.non_terminal_set)) {
+                first_set[key].insert(word);
+                break;
+            } else {
+                for (auto &it : first_set[word]) first_set[key].insert(it);
+                // if the non terminal word could produce EMPTY, then check the next word
+                if (first_set[word].count(EMPTY) == 0) break;
             }
         }
     }
     if (temp_set == first_set) return;
     else calculateFirstSet(rule_set, first_set);
+}
+
+void calculateFollowSet(Set &first_set, RuleSet &rule_set, Set &follow_set) {
+
+    Set temp_set = follow_set;
+    for (Rule &rule : rule_set.rules) {
+        
+        std::string production = rule.second;
+        for (int i = 0; i < production.size() ; i++) {
+            char before = production[i];
+            if (!checkTerminal(before, rule_set.non_terminal_set)) {
+                for (int j = i+1; j < production.size() ; j++) {
+                    char after = production[j];
+                    if (checkTerminal(after, rule_set.non_terminal_set)) {
+                        follow_set[before].insert(after);
+                        break;
+                    } else {
+                        for (auto &it : first_set[after]) follow_set[before].insert(it);
+                        if (follow_set[before].count(EMPTY) == 0) {
+                            break;
+                        } else {
+                            follow_set[before].erase(EMPTY);
+                        }
+                    }
+                }
+            }
+        }
+        char key = rule.first;
+        follow_set[key].insert('$');
+        for (int i = production.size()-1; i >= 0; i--) {
+            char end = production[i];
+            if (checkTerminal(end, rule_set.non_terminal_set)) {
+                break;
+            } else {
+                for (auto &it : follow_set[key]) follow_set[end].insert(it);
+            }
+        }
+
+    }
+    if (temp_set == follow_set) return;
+    else calculateFollowSet(first_set, rule_set, follow_set);
 }
