@@ -8,22 +8,13 @@
 */
 
 # include <iostream>
-# include "FIRST-FOLLOW-SELECT\\FFS_set.cpp"
-
-void test();
+# include "FIRST-FOLLOW-SELECT/FFS_set.h"
 
 int main(int argc, char *argv[]) {
 
-    //test();
     FFS_set ffs_set;
-    ffs(argc, argv, ffs_set);
+    int signal = ffs(argc, argv, ffs_set);
+    
     return 0;
-}
 
-
-
-void test() {
-    std::string str = "a -> b | c | d";
-    clearSpace(str);
-    std::cout << str << std::endl;
 }
