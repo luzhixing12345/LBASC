@@ -1,3 +1,4 @@
-S -> aA
-A -> ST | e
+S -> Abc
+A -> DT | e
+D -> a | d
 T -> +A | *A

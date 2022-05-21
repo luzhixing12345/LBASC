@@ -18,20 +18,17 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
+#include <set>
 
 #define Rule std::pair<char,std::string> // {A , abcd}
-
-struct Set
-{
-    char non_terminal_word;
-    std::vector<char> word;
-};
-
+#define Set std::unordered_map<char, std::set<char>> // [A] -> {a,b,c,d}
+#define EMPTY 'e'
 
 struct FFS_set {
-    std::vector<Set> first_set;
-    std::vector<Set> follow_set;
-    std::vector<std::pair<Rule,std::vector<char>>> select_set;
+    Set first_set;
+    Set follow_set;
+    std::vector<std::pair<Rule,std::set<char>>> select_set;
 };
 
 struct RuleSet
@@ -44,10 +41,10 @@ struct RuleSet
 
 int ffs(int argc, char *argv[], FFS_set &ffs_set);
 
-void calculateFirstSet(RuleSet &rule_set, std::vector<Set>&first_set);
+void calculateFirstSet(RuleSet &rule_set, Set&first_set);
 
-void calculateFollowSet(std::vector<Set>&first_set, RuleSet &rule_set, std::vector<Set>&follow_set);
+void calculateFollowSet(Set&first_set, RuleSet &rule_set, Set&follow_set);
 
-void calculateSelectSet(std::vector<Set>&first_set, std::vector<Set>&follow_set, RuleSet &rule_set, std::vector<std::pair<Rule,std::vector<char>>> &select_set);
+void calculateSelectSet(Set&first_set, Set&follow_set, RuleSet &rule_set, std::vector<std::pair<Rule,std::set<char>>>&select_set);
 
 #endif // TOOLS_FIRST_FOLLOW_SELECT_FFS_SET_H_
