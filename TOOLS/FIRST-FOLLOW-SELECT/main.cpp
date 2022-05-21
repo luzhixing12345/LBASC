@@ -8,7 +8,7 @@
 */
 
 # include <iostream>
-# include "FIRST-FOLLOW-SELECT/FFS_set.h"
+# include "FFS_set.h"
 
 
 void showFFS(FFS_set &ffs_set) {

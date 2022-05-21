@@ -190,6 +190,8 @@ void calculateFollowSet(Set &first_set, RuleSet &rule_set, Set &follow_set) {
         if (production[0] == EMPTY) {
             continue;
         }
+        // if A is a non terminal word
+        // then the word after A is the follow set of A
         for (int i = 0; i < production.size() ; i++) {
             char before = production[i];
             if (!checkTerminal(before, rule_set.non_terminal_set)) {
@@ -211,6 +213,8 @@ void calculateFollowSet(Set &first_set, RuleSet &rule_set, Set &follow_set) {
         }
         char key = rule.first;
         follow_set[key].insert('$');
+        // if the last word is a non terminal word
+        // then the follow set of the last word includes the follow set of the rule
         for (int i = production.size()-1; i >= 0; i--) {
             char end = production[i];
             if (checkTerminal(end, rule_set.non_terminal_set)) {
@@ -229,18 +233,25 @@ void calculateSelectSet(Set &first_set,
                         RuleSet &rule_set, 
                         std::vector<std::pair<Rule,std::set<char>>> &select_set)
 {
+    // for each rule
+    // if the first word is a non terminal word
+    // then the first set of the first word is the select set of the rule
+    // if the first word is a terminal word
+    // then the first word is the select set of the rule
+    // if the first word is EMPTY
+    // then the follow set of the rule is the select set of the rule
     for (Rule &rule : rule_set.rules) {
-        char first_char = rule.second[0];
-        if (first_char == EMPTY) {
+        char first_word = rule.second[0];
+        if (first_word == EMPTY) {
             char key = rule.first;
             select_set.push_back(std::make_pair(rule, follow_set[key]));
         } else {
-            if (checkTerminal(first_char, rule_set.non_terminal_set)) {
+            if (checkTerminal(first_word, rule_set.non_terminal_set)) {
                 std::set<char> temp;
-                temp.insert(first_char);
+                temp.insert(first_word);
                 select_set.push_back(std::make_pair(rule, temp));
             } else {
-                select_set.push_back(std::make_pair(rule, first_set[first_char]));
+                select_set.push_back(std::make_pair(rule, first_set[first_word]));
             }
         }
     }
