@@ -10,20 +10,15 @@
 #ifndef TOOLS_FIRST_FOLLOW_SELECT_FFS_SET_H_
 #define TOOLS_FIRST_FOLLOW_SELECT_FFS_SET_H_
 
-#define INPUT_ERROR -1
-#define SUCCESS 0
-#define RUN_TIME_ERROR 1
-
-#include <iostream>
 #include <string>
-#include <vector>
 #include <algorithm>
 #include <unordered_map>
 #include <set>
+#include "../utils.h"
 
 #define Rule std::pair<char,std::string> // {A , abcd}
 #define Set std::unordered_map<char, std::set<char>> // [A] -> {a,b,c,d}
-#define EMPTY 'e'
+
 
 struct FFS_set {
     Set first_set;
@@ -39,7 +34,7 @@ struct RuleSet
 };
 
 
-int ffs(int argc, char *argv[], FFS_set &ffs_set);
+int ffs(std::vector<std::string> &grammar_lines, FFS_set &ffs_set);
 
 void calculateFirstSet(RuleSet &rule_set, Set&first_set);
 

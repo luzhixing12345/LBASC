@@ -10,7 +10,6 @@
 
 
 #include "FFS_set.h"
-#include <fstream>
 
 // remove the space in the string
 void clearSpace(std::string &str) {
@@ -44,33 +43,11 @@ void showSet(std::vector<Rule>&rules, std::vector<char> &non_terminal_set, std::
 
 }
 
-int ffs(int argc, char *argv[], FFS_set &ffs_set) {
-
-    if (argc != 2) {
-        std::cout << "Usage: main.exe grammar.txt" << std::endl;
-        return INPUT_ERROR;
-    }
-    std::string grammar_file = argv[1];
-    // read grammar file
-    std::vector<std::string> grammar_lines;
-    std::string line;
-    std::ifstream grammar_file_stream;
-    grammar_file_stream.open(grammar_file, std::ios::in);
-    if (!grammar_file_stream.is_open()) {
-        std::cout << "Error: cannot open grammar file" << std::endl;
-        return RUN_TIME_ERROR;
-    }
-    while (std::getline(grammar_file_stream, line)) {
-        grammar_lines.push_back(line);
-    }
-    grammar_file_stream.close();
-    // test
-    // for (auto &line : grammar_lines) {
-    //     std::cout << line << std::endl;
-    // }
+int ffs(std::vector<std::string> &grammar_lines, FFS_set &ffs_set) {
 
     std::vector<char> non_terminal_set, terminal_set;
     std::vector<Rule> rules;
+    std::string line;
     for (int i = 0; i < grammar_lines.size(); i++) {
         line = grammar_lines[i];
         // split from '->'

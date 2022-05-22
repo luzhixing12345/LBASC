@@ -7,3 +7,9 @@
  *@Github: luzhixing12345
 */
 
+# include "LL1.h"
+
+LL1_ACTION LL1_analyasis(std::string input_str, std::vector<std::pair<Rule,std::set<char>>> select_set) {
+    
+}
+

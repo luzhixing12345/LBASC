@@ -7,4 +7,6 @@
  *@Github: luzhixing12345
 */
 
-
+int main() {
+    
+}
