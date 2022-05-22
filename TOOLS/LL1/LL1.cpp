@@ -32,16 +32,26 @@ int LL1_analyasis(std::string &input_str,
     stk.push(start_symbol);
 
     ACTION action;
-    while (stk.size() != 1) {
+    while (!stk.empty()) {
         action.residual_string = input_str;
         action.analysis_stack = stackToString(stk);
         if (input_str.size() == 0) return INPUT_ERROR;
-        std::string key = "" + input_str[0] + stk.top();
-        if (table_map.count(key) == 0) return INPUT_ERROR;
-        action.analysis_action = table_map[key];
+        if (action.residual_string[0] == action.analysis_stack[0]) {
+            input_str.erase(0,1);
+            stk.pop();
+            action.analysis_action = std::make_pair(' ',"");
+        } else {
+            std::string key = "" + input_str[0] + stk.top();
+            if (table_map.count(key) == 0) return INPUT_ERROR;
+            action.analysis_action = table_map[key];
+            stk.pop();
+            for (int i = action.analysis_action.second.size()-1; i >= 0; i--) {
+                stk.push(action.analysis_action.second[i]);
+            }
+        }
         ll1_deduction.push_back(action);
     }
-
+    std::cout << std::endl;
     showLL1action(ll1_deduction);
     return SUCCESS;
 }
@@ -60,6 +70,7 @@ void drawLine(int length) {
 
 void drawBlock(BLOCK &blocks, int length) {
     int side_distance;
+    std::cout << "???";
     for (int i = 0; i < length; i++) {
         std::cout << '|';
         side_distance = (TABLE_SIZE - blocks[i].second.size())/2;
@@ -138,15 +149,20 @@ void showLL1action(LL1_DEDUCTION &ll1_deduction) {
     BLOCK blocks(table_length);
     for (int i = 0; i < table_width; i++) {
         resetBlock(blocks);
+        
         if (i == 0) {
-            blocks[0].second = "residual str";
-            blocks[1].second = "analysis stk";
-            blocks[2].second = "analysis act";
+            blocks[0].second += "residual str";
+            blocks[1].second += "analysis stk";
+            blocks[2].second += "analysis act";
         } else {
-            blocks[0].second = ll1_deduction[i-1].residual_string;
-            blocks[1].second = ll1_deduction[i-1].analysis_stack;
-            blocks[2].second = ruleToString(ll1_deduction[i-1].analysis_action);
+            blocks[0].second += ll1_deduction[i-1].residual_string;
+            blocks[1].second += ll1_deduction[i-1].analysis_stack;
+            blocks[2].second += ruleToString(ll1_deduction[i-1].analysis_action);
         }
+        // test
+        std::cout << i << std::endl;
+        std::cout << ll1_deduction[i-1].residual_string << " "<< ll1_deduction[i-1].analysis_stack << " ";
+        std::cout << ruleToString(ll1_deduction[i-1].analysis_action) << std::endl;
     }
     drawBlock(blocks, table_length);
 }
