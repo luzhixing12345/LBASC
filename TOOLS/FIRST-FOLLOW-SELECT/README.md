@@ -59,10 +59,44 @@ T -> e: $ )
 
   > 只要不在 `->`中间加空格都无所谓
 
-一个示例写法
+比如我想要求得的文法是
 
 ```txt
-S -> (L) | a
-L -> ST
-T -> ,ST | e
+D -> TL
+T -> int | char
+L -> *L | L[] | L() | (L) |id
+```
+
+我可以写作如 `test.txt`中的形式, 执行 `main.exe test.txt`
+
+```txt
+D -> TL
+T -> a | b
+L -> *L | L[]|L()|(L)|c
+```
+
+结果为
+
+```txt
+SUCCESS to calculate
+---------------------
+FIRST SET:
+D: a b
+L: ( * c
+T: a b
+---------------------
+FOLLOW SET:
+L: $ ( ) [
+D: $
+T: $ ( * c
+---------------------
+SELECT SET:
+D -> TL: a b
+T -> a: a
+T -> b: b
+L -> *L: *
+L -> L[]: ( * c
+L -> L(): ( * c
+L -> (L): (
+L -> c: c
 ```
