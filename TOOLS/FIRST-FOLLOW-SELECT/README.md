@@ -1,4 +1,4 @@
-# LL1文法 求FIRST FOLLOW SELECT集
+# 求FIRST FOLLOW SELECT集
 
 关于如何计算 求FIRST FOLLOW SELECT集的知识我整理在 [我的博客-编译原理](https://luzhixing12345.github.io/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/)上, 如果你对这部分知识尚不清楚可以去看一下
 
@@ -16,7 +16,7 @@ cd TOOLS/FIRST-FOLLOW-SELECT
   g++ main.cpp FFS_set.cpp -o main.exe
   ```
 
-- 如果你没有也可以直接使用我编译过的 `main.exe`
+- 如果没有也可以直接使用我编译过的 `main.exe`
 
 我在该文件夹下提供了一个示例文件 `grammar.txt`,执行
 
@@ -58,6 +58,8 @@ T -> e    : $ )
 - 空格我在程序中有做处理,`A -> (B)`与 `A-> ( B )`是等效的,无需担心
 
   > 只要不在 `->`中间加空格都无所谓
+
+- 不要有空行
 
 比如我想要求得的文法是
 

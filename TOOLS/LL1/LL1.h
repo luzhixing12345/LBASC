@@ -11,6 +11,7 @@
 #define TOOLS_LL1_LL1_H_
 
 # include "../FIRST-FOLLOW-SELECT/FFS_set.h"
+# include "../utils.h"
 
 struct LL1_ACTION
 {
@@ -20,11 +21,13 @@ struct LL1_ACTION
 };
 
 
-LL1_ACTION LL1_analyasis(std::string input_str, std::vector<std::pair<Rule,std::set<char>>> select_set);
+int LL1_analyasis(std::string &input_str, 
+                  RuleSet &rule_set,
+                  SELECT_SET &select_set, 
+                  LL1_ACTION &ll1_action);
 
 
-
-
+void showLL1analysisTable(RuleSet &rule_set, SELECT_SET &select_set);
 
 
 

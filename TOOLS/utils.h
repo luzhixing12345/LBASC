@@ -18,6 +18,7 @@
 #define SUCCESS 0
 #define RUN_TIME_ERROR 1
 #define EMPTY 'e'
+#define TABLE_SIZE 8
 
 static int read_grammer_lines(int argc, char *argv[], std::vector<std::string> &grammar_lines) {
 
@@ -45,7 +46,23 @@ static int read_grammer_lines(int argc, char *argv[], std::vector<std::string> &
     return SUCCESS;
 }
 
+static void signalCheck(int signal, std::string checkItemDescription) {
+    for (int i = 0; i <= 20 ; i++) std::cout << "-";
+    std::cout << std::endl;
 
+    if (signal == SUCCESS) {
+        std::cout << "SUCCESS to calculate " << checkItemDescription << std::endl;
+    } else if (signal == RUN_TIME_ERROR) {
+        std::cout << "RUN_TIME_ERROR" << std::endl;
+    } else if (signal == INPUT_ERROR) {
+        std::cout << "INPUT_ERROR" << std::endl;
+    } else {
+        std::cout << "STANGE ERROR ???" << std::endl;
+    }
+
+    for (int i = 0; i <= 20 ; i++) std::cout << "-";
+    std::cout << std::endl;
+}
 
 
 

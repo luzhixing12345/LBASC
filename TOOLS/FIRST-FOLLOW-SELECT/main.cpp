@@ -58,15 +58,7 @@ int main(int argc, char *argv[]) {
     }
     int signal = ffs(grammar_lines, ffs_set);
     
-    if (signal == SUCCESS) {
-        std::cout << "SUCCESS to calculate" << std::endl;
-    } else if (signal == RUN_TIME_ERROR) {
-        std::cout << "RUN_TIME_ERROR" << std::endl;
-    } else if (signal == INPUT_ERROR) {
-        std::cout << "INPUT_ERROR" << std::endl;
-    } else {
-        std::cout << "STANGE ERROR ???" << std::endl;
-    }
+    signalCheck(signal, "ffs set");
     
     showFFS(ffs_set);
     return 0;

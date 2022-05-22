@@ -18,12 +18,12 @@
 
 #define Rule std::pair<char,std::string> // {A , abcd}
 #define Set std::unordered_map<char, std::set<char>> // [A] -> {a,b,c,d}
-
+#define SELECT_SET std::vector<std::pair<Rule,std::set<char>>>
 
 struct FFS_set {
     Set first_set;
     Set follow_set;
-    std::vector<std::pair<Rule,std::set<char>>> select_set;
+    SELECT_SET select_set;
 };
 
 struct RuleSet
@@ -36,6 +36,8 @@ struct RuleSet
 
 int ffs(std::vector<std::string> &grammar_lines, FFS_set &ffs_set);
 
+int getRuleSet(std::vector<std::string> &grammar_lines, RuleSet &rule_set);
+
 void calculateFirstSet(RuleSet &rule_set, Set&first_set);
 
 void calculateFollowSet(Set&first_set, RuleSet &rule_set, Set&follow_set);
@@ -43,6 +45,6 @@ void calculateFollowSet(Set&first_set, RuleSet &rule_set, Set&follow_set);
 void calculateSelectSet(Set&first_set,
                         Set&follow_set, 
                         RuleSet &rule_set, 
-                        std::vector<std::pair<Rule,std::set<char>>>&select_set);
+                        SELECT_SET&select_set);
 
 #endif // TOOLS_FIRST_FOLLOW_SELECT_FFS_SET_H_

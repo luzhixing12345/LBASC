@@ -4,7 +4,7 @@
 
 ## 一些编译原理的算法(C++)
 
-- [求解FIRST集-FOLLOW集-SELECT集](TOOLS/FIRST-FOLLOW-SELECT)
+- [求解FIRST集-FOLLOW集-SELECT集](TOOLS/FIRST-FOLLOW-SELECT/README.md)
 - [求解LL(1)文法]
 - [求解LR(0)文法]
 

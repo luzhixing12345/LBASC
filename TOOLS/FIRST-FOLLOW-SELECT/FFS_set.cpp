@@ -40,97 +40,19 @@ void showSet(std::vector<Rule>&rules, std::vector<char> &non_terminal_set, std::
         std::cout<< i << " ";
     }
     std::cout<< "}" << std::endl;
-
 }
 
 int ffs(std::vector<std::string> &grammar_lines, FFS_set &ffs_set) {
 
-    std::vector<char> non_terminal_set, terminal_set;
-    std::vector<Rule> rules;
-    std::string line;
-    for (int i = 0; i < grammar_lines.size(); i++) {
-        line = grammar_lines[i];
-        // split from '->'
-        std::string left_side = line.substr(0, line.find("->"));
-        clearSpace(left_side);
-
-        char left_side_char;
-        if (left_side.size() !=1) {
-            std::cout<< "left side to be "<< left_side << std::endl;
-            std::cout<< "non terminal word should be a single char "<< std::endl;
-            return RUN_TIME_ERROR;
-        } else {
-            left_side_char = left_side[0];
-        }
-        // left side to be in non_terminal_set
-        non_terminal_set.push_back(left_side_char);
-
-        std::string right_side = line.substr(line.find("->") + 2);
-        // split from '|'
-        std::vector<std::string> right_side_rules;
-        std::string right_side_rule;
-        for (auto &c : right_side) {
-            if (c == '|') {
-                clearSpace(right_side_rule);
-
-                right_side_rules.push_back(right_side_rule);
-                right_side_rule = "";
-            } else {
-                right_side_rule += c;
-            }
-        }
-        clearSpace(right_side_rule);
-        right_side_rules.push_back(right_side_rule);
-
-        for (auto &right_side_rule : right_side_rules) {
-            Rule t_rule;
-            t_rule.first = left_side_char;
-            t_rule.second = right_side_rule;
-            rules.push_back(t_rule);
-        }
-    }
-
-    // right side && not in left side to be in terminal_set
-    for (auto &pair : rules) {
-        for (char &c : pair.second) {
-            if (checkTerminal(c, non_terminal_set)) {
-                terminal_set.push_back(c);
-            }
-        }
-    }
     RuleSet rule_set;
-    rule_set.non_terminal_set = non_terminal_set;
-    rule_set.terminal_set = terminal_set;
-    rule_set.rules = rules;
-
-    //showSet(rules, non_terminal_set, terminal_set);
+    getRuleSet(grammar_lines, rule_set);
 
     // calculate first set
     calculateFirstSet(rule_set, ffs_set.first_set);
 
-    // std::cout << "first set" << std::endl;
-    // for (auto &it : ffs_set.first_set) {
-    //     std::cout << it.first << ": ";
-    //     for (auto &i : it.second) {
-    //         std:: cout<< i << " ";
-    //     }
-    //     std::cout<<std::endl;
-    // }
-
-    
-
     // calcualte follow set
     calculateFollowSet(ffs_set.first_set, rule_set, ffs_set.follow_set);
 
-    // std::cout << "follow set" <<std::endl;
-
-    // for (auto &it : ffs_set.follow_set) {
-    //     std::cout << it.first << ": ";
-    //     for (auto &i : it.second) {
-    //         std:: cout<< i << " ";
-    //     }
-    //     std::cout<<std::endl;
-    // }
     // calcualte select set
     calculateSelectSet(ffs_set.first_set, ffs_set.follow_set, rule_set, ffs_set.select_set);
 
@@ -208,7 +130,7 @@ void calculateFollowSet(Set &first_set, RuleSet &rule_set, Set &follow_set) {
 void calculateSelectSet(Set &first_set,
                         Set &follow_set,
                         RuleSet &rule_set, 
-                        std::vector<std::pair<Rule,std::set<char>>> &select_set)
+                        SELECT_SET &select_set)
 {
     // for each rule
     // if the first word is a non terminal word
@@ -232,4 +154,67 @@ void calculateSelectSet(Set &first_set,
             }
         }
     }
+}
+
+int getRuleSet(std::vector<std::string> &grammar_lines, RuleSet &rule_set) {
+
+    std::vector<char> non_terminal_set, terminal_set;
+    std::vector<Rule> rules;
+    std::string line;
+    for (int i = 0; i < grammar_lines.size(); i++) {
+        line = grammar_lines[i];
+        // split from '->'
+        std::string left_side = line.substr(0, line.find("->"));
+        clearSpace(left_side);
+
+        char left_side_char;
+        if (left_side.size() !=1) {
+            std::cout<< "left side to be "<< left_side << std::endl;
+            std::cout<< "non terminal word should be a single char "<< std::endl;
+            return RUN_TIME_ERROR;
+        } else {
+            left_side_char = left_side[0];
+        }
+        // left side to be in non_terminal_set
+        non_terminal_set.push_back(left_side_char);
+
+        std::string right_side = line.substr(line.find("->") + 2);
+        // split from '|'
+        std::vector<std::string> right_side_rules;
+        std::string right_side_rule;
+        for (auto &c : right_side) {
+            if (c == '|') {
+                clearSpace(right_side_rule);
+
+                right_side_rules.push_back(right_side_rule);
+                right_side_rule = "";
+            } else {
+                right_side_rule += c;
+            }
+        }
+        clearSpace(right_side_rule);
+        right_side_rules.push_back(right_side_rule);
+
+        for (auto &right_side_rule : right_side_rules) {
+            Rule t_rule;
+            t_rule.first = left_side_char;
+            t_rule.second = right_side_rule;
+            rules.push_back(t_rule);
+        }
+    }
+
+    // right side && not in left side to be in terminal_set
+    for (auto &pair : rules) {
+        for (char &c : pair.second) {
+            if (checkTerminal(c, non_terminal_set)) {
+                terminal_set.push_back(c);
+            }
+        }
+    }
+    
+    rule_set.non_terminal_set = non_terminal_set;
+    rule_set.terminal_set = terminal_set;
+    rule_set.rules = rules;
+    //showSet(rules, non_terminal_set, terminal_set);
+    return SUCCESS;
 }
