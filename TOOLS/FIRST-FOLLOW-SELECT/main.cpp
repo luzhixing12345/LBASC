@@ -7,7 +7,6 @@
  *@Github: luzhixing12345
 */
 
-# include <iomanip>
 # include "FFS_set.h"
 
 
@@ -37,8 +36,7 @@ void showFFS(FFS_set &ffs_set) {
     std::cout << std::endl;
     std::cout << "SELECT SET: "<<std::endl;
     for (auto &it : ffs_set.select_set) {
-        std::string production = " -> " + it.first.second;
-        production = it.first.first + production;
+        std::string production = ruleToString(it.first);
         std::cout << std::left << std::setw(10) << production << ": ";
         for (auto &i : it.second) {
             std:: cout<< i << " ";

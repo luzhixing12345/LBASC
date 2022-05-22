@@ -7,8 +7,6 @@
  *@Github: luzhixing12345
 */
 
-
-
 #include "FFS_set.h"
 
 // remove the space in the string
@@ -22,6 +20,12 @@ bool checkTerminal(char c, std::vector<char>&non_terminal_set) {
         if (c == s) return false;
     }
     return true;
+}
+
+std::string ruleToString(Rule &rule) {
+    std::string rule_str = " -> " + rule.second;
+    rule_str = rule.first + rule_str;
+    return rule_str;
 }
 
 void showSet(std::vector<Rule>&rules, std::vector<char> &non_terminal_set, std::vector<char> &terminal_set) {

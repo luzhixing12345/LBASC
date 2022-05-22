@@ -33,6 +33,7 @@ struct RuleSet
     std::vector<Rule> rules;
 };
 
+std::string ruleToString(Rule &rule);
 
 int ffs(std::vector<std::string> &grammar_lines, FFS_set &ffs_set);
 

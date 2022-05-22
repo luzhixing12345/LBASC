@@ -13,12 +13,14 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <iomanip>
+#include <stack>
 
 #define INPUT_ERROR -1
 #define SUCCESS 0
 #define RUN_TIME_ERROR 1
 #define EMPTY 'e'
-#define TABLE_SIZE 8
+#define TABLE_SIZE 15 // size of the table
 
 static int read_grammer_lines(int argc, char *argv[], std::vector<std::string> &grammar_lines) {
 
@@ -64,7 +66,15 @@ static void signalCheck(int signal, std::string checkItemDescription) {
     std::cout << std::endl;
 }
 
-
+// pass by value instead of pointer to avoid recoverying stack
+static std::string stackToString(std::stack<char> stk) {
+    std::string str = "";
+    while (!stk.empty()) {
+        str.push_back(stk.top());
+        stk.pop();
+    }
+    return str;
+}
 
 
 #endif  // TOOLS_UTILS_H_ 
