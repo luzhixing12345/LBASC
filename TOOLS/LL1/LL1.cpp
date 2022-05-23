@@ -100,7 +100,7 @@ bool showLL1analysisTable(RuleSet &rule_set, SELECT_SET &select_set, std::unorde
             analysis_terminal_set.insert(it2);
         }
     }
-    int table_length = analysis_terminal_set.size() + 2;
+    int table_length = analysis_terminal_set.size() + 1;
     int table_width = rule_set.non_terminal_set.size() + 1;
     std::unordered_map<char, int> terminal_map;
     drawLine(table_length);
@@ -119,8 +119,6 @@ bool showLL1analysisTable(RuleSet &rule_set, SELECT_SET &select_set, std::unorde
                 terminal_map[it] = index;
                 index++;
             }
-            blocks[table_length-1].second += "$";
-            terminal_map['$'] = table_length-1;
         } else {
             char non_terminal_word = rule_set.non_terminal_set[i-1];
             blocks[0].first = true;
