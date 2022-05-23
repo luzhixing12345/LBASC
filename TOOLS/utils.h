@@ -38,6 +38,9 @@ static int read_grammer_lines(int argc, char *argv[], std::vector<std::string> &
         return RUN_TIME_ERROR;
     }
     while (std::getline(grammar_file_stream, line)) {
+        if (line.empty()) {
+            continue;
+        }
         grammar_lines.push_back(line);
     }
     grammar_file_stream.close();

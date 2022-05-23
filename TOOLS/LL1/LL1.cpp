@@ -93,7 +93,14 @@ void resetBlock(BLOCK &blocks) {
 
 bool showLL1analysisTable(RuleSet &rule_set, SELECT_SET &select_set, std::unordered_map<std::string, Rule> &table_map) {
 
-    int table_length = rule_set.terminal_set.size() + 2;
+    // only calculate terminal set in select set instead of all terminals
+    std::set<char> analysis_terminal_set;
+    for (auto &it : select_set) {
+        for (auto &it2 : it.second) {
+            analysis_terminal_set.insert(it2);
+        }
+    }
+    int table_length = analysis_terminal_set.size() + 2;
     int table_width = rule_set.non_terminal_set.size() + 1;
     std::unordered_map<char, int> terminal_map;
     drawLine(table_length);
@@ -106,10 +113,11 @@ bool showLL1analysisTable(RuleSet &rule_set, SELECT_SET &select_set, std::unorde
         if (i == 0) {
             // the first line of the table
             blocks[0].second += "+";
-            for (int j = 0; j < rule_set.terminal_set.size(); j++) {
-                blocks[j+1].first = true;
-                blocks[j+1].second += rule_set.terminal_set[j];
-                terminal_map[rule_set.terminal_set[j]] = j+1;
+            int index = 1;
+            for (auto &it : analysis_terminal_set) {
+                blocks[index].second += it;
+                terminal_map[it] = index;
+                index++;
             }
             blocks[table_length-1].second += "$";
             terminal_map['$'] = table_length-1;
