@@ -24,7 +24,8 @@ bool checkTerminal(char c, std::vector<char>&non_terminal_set) {
 
 std::string ruleToString(Rule &rule) {
     std::string rule_str = " -> " + rule.second;
-    rule_str = rule.first + rule_str;
+    if (rule.first == ' ') rule_str = " ";
+    else rule_str = rule.first + rule_str;
     return rule_str;
 }
 

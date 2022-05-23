@@ -46,6 +46,7 @@ int LL1_analyasis(std::string &input_str,
             action.analysis_action = table_map[key];
             stk.pop();
             for (int i = action.analysis_action.second.size()-1; i >= 0; i--) {
+                if (action.analysis_action.second[i] == EMPTY) break;
                 stk.push(action.analysis_action.second[i]);
             }
         }
@@ -70,7 +71,6 @@ void drawLine(int length) {
 
 void drawBlock(BLOCK &blocks, int length) {
     int side_distance;
-    std::cout << "???";
     for (int i = 0; i < length; i++) {
         std::cout << '|';
         side_distance = (TABLE_SIZE - blocks[i].second.size())/2;
@@ -160,9 +160,10 @@ void showLL1action(LL1_DEDUCTION &ll1_deduction) {
             blocks[2].second += ruleToString(ll1_deduction[i-1].analysis_action);
         }
         // test
-        std::cout << i << std::endl;
-        std::cout << ll1_deduction[i-1].residual_string << " "<< ll1_deduction[i-1].analysis_stack << " ";
-        std::cout << ruleToString(ll1_deduction[i-1].analysis_action) << std::endl;
+        // std::cout << i << std::endl;
+        // std::cout << blocks[0].second << " "<< blocks[0].second << " ";
+        // std::cout << blocks[2].second << std::endl;
+        drawBlock(blocks, table_length);
     }
-    drawBlock(blocks, table_length);
+    
 }
