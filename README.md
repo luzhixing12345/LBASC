@@ -5,7 +5,7 @@
 ## 一些编译原理的算法(C++)
 
 - [求解FIRST集-FOLLOW集-SELECT集](TOOLS/FIRST-FOLLOW-SELECT/README.md)
-- [求解LL(1)文法]
+- [求解LL(1)文法](TOOLS/LL1/README.md)
 - [求解LR(0)文法]
 
 > TODO: 做一个可视化的程序,输出图片 2022/5/22
