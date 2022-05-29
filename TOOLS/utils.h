@@ -22,7 +22,7 @@
 #define EMPTY 'e'
 #define TABLE_SIZE 15 // size of the table
 
-static int read_grammer_lines(int argc, char *argv[], std::vector<std::string> &grammar_lines) {
+static int read_grammar_lines(int argc, char *argv[], std::vector<std::string> &grammar_lines) {
 
     if (argc != 2) {
         std::cout << "Usage: main.exe grammar.txt" << std::endl;

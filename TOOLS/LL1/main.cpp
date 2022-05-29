@@ -14,7 +14,7 @@
 int main(int argc, char *argv[]) {
     FFS_set ffs_set;
     std::vector<std::string> grammar_lines;
-    int read_signal = read_grammer_lines(argc, argv, grammar_lines);
+    int read_signal = read_grammar_lines(argc, argv, grammar_lines);
     if (read_signal != SUCCESS) {
         std::cout << "read file "<< argv[1] << " unsuccessfully";
         return 0;
