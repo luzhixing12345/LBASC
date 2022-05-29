@@ -4,24 +4,19 @@
 
 一些代码实现时的细节我也补充在注释里了, 有兴趣的话可以参考
 
-## 使用方法
+## 编译
 
 ```bash
 cd TOOLS/FIRST-FOLLOW-SELECT
+make
 ```
 
-- 如果有 g++ 编译器那么可以自行编译
-
-  ```bash
-  g++ main.cpp FFS_set.cpp -o main.exe
-  ```
-
-- 如果没有也可以直接使用我编译过的 `main.exe`
+## 使用方法
 
 我在该文件夹下提供了一个示例文件 `grammar.txt`,执行
 
 ```bash
-main.exe grammar.txt
+main grammar.txt
 ```
 
 ```txt
