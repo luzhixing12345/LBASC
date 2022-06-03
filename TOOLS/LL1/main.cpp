@@ -28,9 +28,9 @@ int main(int argc, char *argv[]) {
     std::string input_str;
     std::cin >> input_str;
 
-    std::cout << std::endl << "Please input the start symbol: ";
-    char start_symbol;
-    std::cin >> start_symbol;
+    // std::cout << std::endl << "Please input the start symbol: ";
+    char start_symbol = grammar_lines[0][0];
+    // std::cin >> start_symbol;
     LL1_DEDUCTION ll1_deduction;
     RuleSet rule_set;
     getRuleSet(grammar_lines, rule_set);

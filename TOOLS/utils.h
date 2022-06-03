@@ -15,6 +15,7 @@
 #include <fstream>
 #include <iomanip>
 #include <stack>
+#include <string>
 
 #define INPUT_ERROR -1
 #define SUCCESS 0
@@ -40,6 +41,13 @@ static int read_grammar_lines(int argc, char *argv[], std::vector<std::string> &
     while (std::getline(grammar_file_stream, line)) {
         if (line.empty()) {
             continue;
+        }
+        // remove the space in the line
+        for (int i = 0; i < line.size(); i++) {
+            if (line[i] == ' ') {
+                line.erase(i, 1);
+                i--;
+            }
         }
         grammar_lines.push_back(line);
     }

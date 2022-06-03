@@ -20,24 +20,26 @@ main grammar.txt
 ```
 
 ```txt
-SUCCESS to calculate
 ---------------------
-FIRST SET:
-T: , e
-L: ( a
-S: ( a
+SUCCESS to calculate ffs set
 ---------------------
-FOLLOW SET:
-T: $ )
-S: $ ) ,
-L: $ )
 ---------------------
-SELECT SET:
-S -> (L)  : (
-S -> a    : a
-L -> ST   : ( a
+FIRST SET: 
+T: , e 
+L: ( a 
+S: ( a 
+---------------------
+FOLLOW SET: 
+T: ) 
+L: ) 
+S: $ ) , 
+---------------------
+SELECT SET: 
+S -> (L)  : ( 
+S -> a    : a 
+L -> ST   : ( a 
 T -> ,ST  : ,
-T -> e    : $ )
+T -> e    : )
 ```
 
 编写 `grammar.txt` 时需要注意以下几点:
@@ -72,7 +74,9 @@ L -> *L | L[]|L()|(L)|c
 结果为
 
 ```txt
-SUCCESS to calculate
+---------------------
+SUCCESS to calculate ffs set
+---------------------
 ---------------------
 FIRST SET:
 D: a b
@@ -81,8 +85,8 @@ T: a b
 ---------------------
 FOLLOW SET:
 L: $ ( ) [
-D: $
 T: $ ( * c
+D: $
 ---------------------
 SELECT SET:
 D -> TL   : a b
@@ -90,7 +94,7 @@ T -> a    : a
 T -> b    : b
 L -> *L   : *
 L -> L[]  : ( * c
-L -> L()  : ( * c
+L -> L()  : ( * c 
 L -> (L)  : (
 L -> c    : c
 ```

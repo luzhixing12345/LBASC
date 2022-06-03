@@ -13,13 +13,18 @@
 # include "RE.h"
 
 int main(int argc, char *argv[]) {
-    std::vector<std::string> grammar_lines;
+    
 
-    int read_signal = read_grammar_lines(argc, argv, grammar_lines);
-    if (read_signal != SUCCESS) {
-        std::cout << "read file "<< argv[1] << " unsuccessfully";
-        return 0;
+    if (argc == 2) {
+        std::string regular_expression = argv[1];
+        std::cout << "using regular expression: " << regular_expression << std::endl;
+        // analyse regular expression
+        Graph nfa_graph;
+        int signal = RE_analyasis(regular_expression, nfa_graph);
+    } else {
+        std::vector<std::string> grammar_lines;
+        read_grammar_lines(argc, argv, grammar_lines);
+        std::string FA_type = argv[2];
     }
-    std::cout << "read file "<< argv[1] << " successfully";
     return 0;
 }

@@ -9,6 +9,8 @@
 
 #include "FFS_set.h"
 
+char BEGIN_SYMBOL = 'S';
+
 // remove the space in the string
 void clearSpace(std::string &str) {
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
@@ -49,6 +51,8 @@ void showSet(std::vector<Rule>&rules, std::vector<char> &non_terminal_set, std::
 
 int ffs(std::vector<std::string> &grammar_lines, FFS_set &ffs_set) {
 
+    BEGIN_SYMBOL = grammar_lines[0][0]; // by default, the first character in the first line is the begin symbol
+
     RuleSet rule_set;
     getRuleSet(grammar_lines, rule_set);
 
@@ -88,6 +92,7 @@ void calculateFirstSet(RuleSet &rule_set, Set &first_set) {
 void calculateFollowSet(Set &first_set, RuleSet &rule_set, Set &follow_set) {
 
     Set temp_set = follow_set;
+    follow_set[BEGIN_SYMBOL].insert('$');
     for (Rule &rule : rule_set.rules) {
 
         std::string production = rule.second;
@@ -116,7 +121,7 @@ void calculateFollowSet(Set &first_set, RuleSet &rule_set, Set &follow_set) {
             }
         }
         char key = rule.first;
-        follow_set[key].insert('$');
+        
         // if the last word is a non terminal word
         // then the follow set of the last word includes the follow set of the rule
         for (int i = production.size()-1; i >= 0; i--) {

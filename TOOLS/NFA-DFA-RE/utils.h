@@ -7,5 +7,36 @@
  *@Github: luzhixing12345
 */
 
+#ifndef TOOLS_NFA_DFA_RE_UTILS_H_
+#define TOOLS_NFA_DFA_RE_UTILS_H_
+#define DOT_FILE_NAME "grammar.dot"
+#define PNG_FILE_NAME "result.png"
 
 #include "../utils.h"
+
+class Node {
+public:
+    explicit Node(int status_id) : state_id(status_id) {};
+
+private:
+    bool visited = false;
+    int state_id;
+};
+
+class Graph {
+public:
+    Graph() = default;
+    ~Graph() = default;
+    void addEdge(int start, int end);
+    void addNode(int state_id);
+private:
+    std::vector<std::vector<char>> edges;
+    std::vector<Node> nodes;
+};
+
+
+int write_dot_file(const std::string &dot_file_name, const std::string &dot_file_content);
+
+
+
+#endif // TOOLS_NFA_DFA_RE_UTILS_H_
