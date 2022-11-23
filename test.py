@@ -8,30 +8,22 @@
 '''
 
 import argparse
-import os
-
-
+import sys
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('part',nargs='?',help='the part of the code to be tested')
-    parser.add_argument('--compile','-c',action='store_true',help='compile the cpp code')
-    args = parser.parse_args()
-    
-    test_example = 'LBASC/'+args.part+'/test-example.txt'
-    test_file = 'LBASC/'+args.part+'/calc.py'
-    
-    gcc_part = ['part3','part6']
-    if args.compile:
-        if args.part == 'part3':
-            os.system(f'g++ LBASC\\{args.part}\\main.cpp LBASC\\{args.part}\\interpreter.cpp -o LBASC\\{args.part}\\main.exe ')
-        elif args.part == 'part6':
-            os.system(f'g++ LBASC\\{args.part}\\main.cpp LBASC\\{args.part}\\interpreter.cpp LBASC\\{args.part}\\lexer.cpp -o LBASC\\{args.part}\\main.exe ')
-        os.system(f'LBASC\\{args.part}\\main.exe < '+test_example)
-    else :   
-        if args.part in gcc_part:
-            os.system(f'LBASC\\{args.part}\\main.exe < '+test_example)
-        else:
-            os.system('python '+test_file+' < '+test_example)
-    print('over')
-    
+    part = sys.argv[1]
+    with open(f'src/{part}/test-example.txt','r') as f:
+        test_cases = f.readlines()
+    if part == 'part1':
+        from src.part1.calc import Interpreter
+        
+    elif part == 'part2':
+        from src.part2.calc import Interpreter
+        
+    for case in test_cases:
+        case:str = case.replace("\n",'')
+        program_result = Interpreter(case).expr()
+        calc_result = eval(case)
+        test_result = "pass" if program_result == calc_result else "fail"
+        print('{:<15} = {:<5}({})'.format(case,program_result,test_result))

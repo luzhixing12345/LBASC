@@ -1,18 +1,8 @@
 # part-1
 
-## code job
-
 - [x] 修改代码以允许输入中使用多位整数，例如"12+3"
 - [x] 添加一个跳过空格字符的方法，以便计算器可以处理带有空格字符（如"12 + 3"）的输入
 - [x] 修改代码，而不是"+"句柄"-"来评估减法，如"7-5"
-
-correctness:
-
-```python
-python test.py part1
-```
-
-![20220406020709](https://raw.githubusercontent.com/learner-lu/picbed/master/20220406020709.png)
 
 ## Q&A
 

@@ -38,6 +38,7 @@ class Interpreter(object):
         self.pos = 0
         # current token instance
         self.current_token = None
+        print('init in part1')
 
     def error(self):
         raise Exception('Error parsing input')
@@ -62,7 +63,6 @@ class Interpreter(object):
         # get a character at the position self.pos and decide
         # what token to create based on the single character
         current_char = text[self.pos]
-
         
         if current_char=='+':
             token = Token(PLUS,'+')
@@ -129,29 +129,9 @@ class Interpreter(object):
         else:
             self.error()
 
-def main():
-    cnt = 1
-    correctness = 0
+if __name__ == '__main__':
     while True:
         text = input('calc> ')
-        print(text)
-        if text=='END':
-            break
-        if not text:
-            continue
         interpreter = Interpreter(text)
         result = interpreter.expr()
-        
-        # use the following print if you want to check the output in this python file
-        # print('output =',result)
-        print("output =",result,end='')
-        if result == cnt:
-            print(f' ({chr(0x2713)})')
-            correctness+=1
-        else :
-            print(f' ({chr(0x2717)})')
-        cnt+=1
-    print(f'\n{correctness}/{cnt-1}')
-
-if __name__ == '__main__':
-    main()
+        print(f"{text} = {result}")

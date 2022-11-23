@@ -67,7 +67,7 @@ class Interpreter(object):
             return Token(EOF, None)
         # get a character at the position self.pos and decide
         # what token to create based on the single character
-        current_char = text[self.pos]
+        current_char:str = text[self.pos]
 
         
         if current_char=='+':
@@ -123,7 +123,6 @@ class Interpreter(object):
             right = self.current_token
             self.eat(INTEGER)
 
-
             if op.type==PLUS:
                 left.value = left.value + right.value
             
@@ -136,30 +135,12 @@ class Interpreter(object):
                 left.value = left.value//right.value
         return left.value
                 
-
 def main():
-    cnt = 1
-    correctness = 0
     while True:
         text = input('calc> ')
-        print(text)
-        if text=='END':
-            break
-        if not text:
-            continue
         interpreter = Interpreter(text)
         result = interpreter.expr()
-        
-        # use the following print if you want to check the output in this python file
-        # print('output =',result)
-        print("output =",result,end='')
-        if result == cnt:
-            print(f' ({chr(0x2713)})')
-            correctness+=1
-        else :
-            print(f' ({chr(0x2717)})')
-        cnt+=1
-    print(f'\n{correctness}/{cnt-1}')
+        print(f"{text} = {result}")
 
 
 if __name__ == '__main__':
