@@ -8,22 +8,31 @@
 '''
 
 import argparse
-import sys
+import sys,os
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     part = sys.argv[1]
     with open(f'src/{part}/test-example.txt','r') as f:
         test_cases = f.readlines()
+    
+    LANGUAGE = 'python'    
+    
     if part == 'part1':
         from src.part1.calc import Interpreter
         
     elif part == 'part2':
         from src.part2.calc import Interpreter
+    
+    elif part == 'part3':
+        LANGUAGE = 'C++'
         
     for case in test_cases:
         case:str = case.replace("\n",'')
-        program_result = Interpreter(case).expr()
+        if LANGUAGE == 'python':
+            program_result = Interpreter(case).expr()
+        else:
+            program_result = int(os.popen(f"echo {case} | src/{part}/main").read())
         calc_result = eval(case)
         test_result = "pass" if program_result == calc_result else "fail"
         print('{:<15} = {:<5}({})'.format(case,program_result,test_result))

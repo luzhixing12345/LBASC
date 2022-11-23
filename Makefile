@@ -8,3 +8,7 @@ part1:
 
 part2:
 	@python test.py $@
+
+part3:
+	$(MAKE) -C src/part3
+	@python test.py $@

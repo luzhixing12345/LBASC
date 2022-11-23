@@ -38,7 +38,6 @@ class Interpreter(object):
         self.pos = 0
         # current token instance
         self.current_token = None
-        print('init in part1')
 
     def error(self):
         raise Exception('Error parsing input')
