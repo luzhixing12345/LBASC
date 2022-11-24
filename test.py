@@ -29,7 +29,15 @@ if __name__ == '__main__':
     
     elif part == 'part4':
         from src.part4.calc import test_interface
-        
+    
+    elif part == 'part5':
+        from src.part5.calc import test_interface
+    
+    # max_length = 0
+    # for case in test_cases:
+    #     max_length = max(max_length,len(case))
+    # max_length = (max_length//5+1)*5
+    
     for case in test_cases:
         case:str = case.replace("\n",'')
         if LANGUAGE == 'python':
@@ -38,4 +46,4 @@ if __name__ == '__main__':
             program_result = int(os.popen(f"echo {case} | src/{part}/main").read())
         calc_result = eval(case)
         test_result = "pass" if program_result == calc_result else "fail"
-        print('{:<15} = {:<5}({})'.format(case,program_result,test_result))
+        print('{:<25} = {:<5}({})'.format(case,program_result,test_result))

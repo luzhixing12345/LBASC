@@ -124,9 +124,9 @@ class Interpreter(object):
         self.eat(INTEGER)
         return token.value
 
-    def factor1(self):
+    def term(self):
         '''
-        factor1: factor ((PLUS | MINUS) factor)*
+        term: factor ((MULT | DIV) factor)*
         '''
         result = self.factor()
         
@@ -143,20 +143,20 @@ class Interpreter(object):
     def expr(self):
         """Arithmetic expression parser / interpreter.
 
-        expr   : factor1 ((MUL | DIV) factor1)*
-        factor1: factor ((PLUS | MINUS) factor)*
+        expr   : term ((PLUS | MINUS) term)*
+        term   : factor ((MULT | DIV) factor)*
         factor : INTEGER
         """
-        result = self.factor1()
+        result = self.term()
         
         while self.current_token.type in (PLUS, MINUS):
             token = self.current_token
             if token.type == PLUS:
                 self.eat(PLUS)
-                result = result + self.factor1()
+                result = result + self.term()
             elif token.type == MINUS:
                 self.eat(MINUS)
-                result = result - self.factor1()
+                result = result - self.term()
 
         return result
 

@@ -15,3 +15,6 @@ part3:
 
 part4:
 	@python test.py $@
+
+part5:
+	@python test.py $@

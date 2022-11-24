@@ -187,30 +187,18 @@ class Interpreter(object):
 
 
 def main():
-    correctness = 0
-    cnt = 1
     while True:
         text = input('calc> ')
-        print(text)
-        if text=='END':
-            break
-        if not text:
-            continue
         lexer = Lexer(text)
         interpreter = Interpreter(lexer)
         result = interpreter.expr()
+        print("result = ",result)
         
-        # use the following print if you want to check the output in this python file
-        #print('output =',result)
-        print('output =',result,end='')
-        if cnt == result:
-            correctness+=1
-            print(f' ({chr(0x2713)})')
-        else :
-            print(f' ({chr(0x2717)})')
-        cnt+=1
-        
-    print(f'\n{correctness}/{cnt-1}')
+def test_interface(text)->int:
+    lexer = Lexer(text)
+    interpreter = Interpreter(lexer)
+    result = interpreter.expr()
+    return result
 
 if __name__ == '__main__':
     main()
