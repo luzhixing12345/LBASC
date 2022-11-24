@@ -25,7 +25,7 @@ parser每次返回的并不是值(.value),而是一个`BinOp`类封装的节点n
 
 返回的node作为parser.parser()被interpreter调用,先由visit_BinOp对于二元操作符解析,然后分解到叶结点使用visit_Num得到.value,完成运算.
 
-与之前相比(part5),主要的区别是将运算符的计算作为另一个部分单独提取了出来,由两部分化为三部分,这种思想与我在part3中的interpreter.cpp中的calculate函数类似
+与之前相比(part5),主要的区别是将运算符的计算作为另一个部分单独提取了出来,由两部分化为三部分
 
 ## code job
 
@@ -33,11 +33,3 @@ parser每次返回的并不是值(.value),而是一个`BinOp`类封装的节点n
 - [x] 编写一个转换器（节点访问者），该转换器将算术表达式作为输入，并以LISP样式表示法打印出来，即2 + 3将变为（+ 2 3）和（2 + 3 \* 5）将变为（+ 2（\* 3 5））。您可以在此处找到答案，但在查看提供的解决方案之前，请先尝试解决它。
 
 修改节点visit的时候返回值为字符串而不是计算,字符串的顺序根据前缀中缀后缀调整即可
-
-correctness:
-
-```python
-python test.py part7
-```
-
-![20220407022000](https://raw.githubusercontent.com/learner-lu/picbed/master/20220407022000.png)

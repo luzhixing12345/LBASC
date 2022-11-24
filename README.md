@@ -12,12 +12,14 @@
 - [part4](src/part4/README.md): 如何使用 上下文无关文法(BNF) 处理 `12*2*9/3`
 - [part5](src/part5/README.md): 如何处理 `12+2*9/3+1`
 - [part6](src/part6/README.md): 如何处理 `(1+2)*(3+4)`
-- [part7](src/part7/README.md): 如何使用 抽象语法树(AST) 处理 `(1+2)*(3+4)`
+- [part7](src/part7/README.md): 如何使用 抽象语法树(AST) 处理 `(1+2)*(3+4)` 
 - [part8](src/part8/README.md): 如何处理 `--+-3+4`
 
 ## 运行与测试
 
-笔者构建了一个Makefile文件和test.py脚本来辅助自动化测试,每一个阶段设计了一些测试用例`test-examples.txt`来检验
+笔者构建了一个Makefile文件和test.py脚本来辅助自动化测试,每一个阶段分别设计了一些测试用例`test-examples.txt`来检验
+
+您可使用 `make <part>` 来自动化测试,比如
 
 ```bash
 make part1

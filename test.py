@@ -9,7 +9,14 @@
 
 import argparse
 import sys
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE
+
+def judge(case,program_result,method=None):
+    if method != None:
+        return method(case,program_result)
+    calc_result = int(eval(case))
+    test_result = "pass" if program_result == calc_result else "fail"
+    return test_result
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -17,7 +24,8 @@ if __name__ == '__main__':
     with open(f'src/{part}/test-example.txt','r') as f:
         test_cases = f.readlines()
     
-    LANGUAGE = 'python'    
+    LANGUAGE = 'python'  
+    judge_method = None
     
     if part == 'part1':
         from src.part1.calc import test_interface
@@ -36,10 +44,10 @@ if __name__ == '__main__':
     
     elif part == 'part6':
         LANGUAGE = 'C++'
-    # max_length = 0
-    # for case in test_cases:
-    #     max_length = max(max_length,len(case))
-    # max_length = (max_length//5+1)*5
+
+    elif part == 'part7':
+        print("test 7 has correct answer, test by yourself")
+        exit()        
     
     for case in test_cases:
         case:str = case.replace("\n",'')
@@ -49,6 +57,6 @@ if __name__ == '__main__':
             p = Popen(f"./src/{part}/main",stdout=PIPE,stdin=PIPE,stderr=PIPE,encoding='utf8')
             program_output = p.communicate(input=case)[0]
             program_result = int(program_output)
-        calc_result = int(eval(case))
-        test_result = "pass" if program_result == calc_result else "fail"
+        
+        test_result = judge(case,program_result,method=judge_method)
         print('{:<25} = {:<5}({})'.format(case,program_result,test_result))
