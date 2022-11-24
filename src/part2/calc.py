@@ -142,6 +142,10 @@ def main():
         result = interpreter.expr()
         print(f"{text} = {result}")
 
+def test_interface(text) -> int:
+    interpreter = Interpreter(text)
+    result = interpreter.expr()
+    return result
 
 if __name__ == '__main__':
     main()

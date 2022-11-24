@@ -128,9 +128,17 @@ class Interpreter(object):
         else:
             self.error()
 
-if __name__ == '__main__':
+def main():
     while True:
         text = input('calc> ')
         interpreter = Interpreter(text)
         result = interpreter.expr()
         print(f"{text} = {result}")
+        
+def test_interface(text) -> int:
+    interpreter = Interpreter(text)
+    result = interpreter.expr()
+    return result
+
+if __name__ == '__main__':
+    main()

@@ -12,3 +12,6 @@ part2:
 part3:
 	$(MAKE) -C src/part3
 	@python test.py $@
+
+part4:
+	@python test.py $@
