@@ -47,7 +47,10 @@ if __name__ == '__main__':
 
     elif part == 'part7':
         print("test 7 has correct answer, test by yourself")
-        exit()        
+        exit()
+        
+    elif part == 'part8':
+        from src.part8.calc import test_interface
     
     for case in test_cases:
         case:str = case.replace("\n",'')

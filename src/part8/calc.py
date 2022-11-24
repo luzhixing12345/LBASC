@@ -240,41 +240,6 @@ class Interpreter(NodeVisitor):
 
     def visit_Num(self, node):
         return node.value
-
-    def interpret(self):
-        tree = self.parser.parse()
-        return self.visit(tree)
-
-class NodeVisitor(object):
-    def visit(self, node):
-        # type(node).__name__ = BinOp / Num
-        method_name = 'visit_' + type(node).__name__
-        #print(method_name)
-        
-        # equal to use : self.visit_BinOp(node) / self.visit_Num(node)
-        visitor = getattr(self, method_name, self.generic_visit)
-        return visitor(node)
-
-    def generic_visit(self, node):
-        raise Exception('No visit_{} method'.format(type(node).__name__))
-
-
-class Interpreter(NodeVisitor):
-    def __init__(self, parser):
-        self.parser = parser
-
-    def visit_BinOp(self, node):
-        if node.op.type == PLUS:
-            return self.visit(node.left) + self.visit(node.right)
-        elif node.op.type == MINUS:
-            return self.visit(node.left) - self.visit(node.right)
-        elif node.op.type == MUL:
-            return self.visit(node.left) * self.visit(node.right)
-        elif node.op.type == DIV:
-            return self.visit(node.left) // self.visit(node.right)
-
-    def visit_Num(self, node):
-        return node.value
     
     def visit_UnaryOp(self, node):
         op = node.op.type
@@ -289,32 +254,24 @@ class Interpreter(NodeVisitor):
 
 def main():
     
-    correctness = 0
-    cnt = 1
     while True:
         try:
             text = input('calc> ')
         except EOFError:
             break
-        print(text)
-        if text=='END':
-            break
-        if not text:
-            continue
         lexer = Lexer(text)
         parser = Parser(lexer)
         interpreter = Interpreter(parser)
         result = interpreter.interpret()
+        print("result = ",result)
         
-         # print('output =',result)
-        print('output =',result,end='')
-        if cnt == result:
-            correctness+=1
-            print(f' ({chr(0x2713)})')
-        else :
-            print(f' ({chr(0x2717)})')
-        cnt+=1
-    print(f'\n{correctness}/{cnt-1}')
-        
+def test_interface(text):
+    
+    lexer = Lexer(text)
+    parser = Parser(lexer)
+    interpreter = Interpreter(parser)
+    result = interpreter.interpret()
+    return result
+    
 if __name__ == "__main__":
     main()
