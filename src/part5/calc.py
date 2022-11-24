@@ -169,7 +169,9 @@ class Interpreter(object):
     def expr(self):
         """Arithmetic expression parser / interpreter.
 
-        expr   : term ((MUL | DIV) term)*
+        expr   : term ((PLUS | MINUS) term)*
+        term   : factor ((MULT | DIV) factor)*
+        factor : (PLUS | MINUS) factor | INTEGER | LP expr RP
 
         """
         result = self.term()

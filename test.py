@@ -8,7 +8,8 @@
 '''
 
 import argparse
-import sys,os
+import sys
+from subprocess import Popen, PIPE, STDOUT
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -33,6 +34,8 @@ if __name__ == '__main__':
     elif part == 'part5':
         from src.part5.calc import test_interface
     
+    elif part == 'part6':
+        LANGUAGE = 'C++'
     # max_length = 0
     # for case in test_cases:
     #     max_length = max(max_length,len(case))
@@ -43,7 +46,9 @@ if __name__ == '__main__':
         if LANGUAGE == 'python':
             program_result = test_interface(case)
         else:
-            program_result = int(os.popen(f"echo {case} | src/{part}/main").read())
-        calc_result = eval(case)
+            p = Popen(f"./src/{part}/main",stdout=PIPE,stdin=PIPE,stderr=PIPE,encoding='utf8')
+            program_output = p.communicate(input=case)[0]
+            program_result = int(program_output)
+        calc_result = int(eval(case))
         test_result = "pass" if program_result == calc_result else "fail"
         print('{:<25} = {:<5}({})'.format(case,program_result,test_result))

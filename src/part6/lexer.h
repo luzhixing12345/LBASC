@@ -1,48 +1,46 @@
-/*
- *Copyright (c) 2022 All rights reserved
- *@description: the header file for the lexer
- *@author: Zhixing Lu
- *@date: 2022-04-06
- *@email: luzhixing12345@163.com
- *@Github: luzhixing12345
-*/
 
 
-#ifndef LEARNING_PART_LBASC_PART6_LEXER_H_
-#define LEARNING_PART_LBASC_PART6_LEXER_H_
-
-
-#define PLUS '+'
-#define MINUS '-'
-#define MULT '*'
-#define DIV '/'
-#define SPACE ' '
-#define INTEGER 'I'
-#define LEFT_PARENTHESIS '('
-#define RIGHT_PARENTHESIS ')'
+#ifndef __SRC__PART6__LEXER_H
+#define __SRC__PART6__LEXER_H
 
 #include <iostream>
-#include <string>
+#ifndef __TOKEN_INIT__
+#define SPACE ' '
+#define ADD '+'
+#define SUB '-'
+#define MULT '*'
+#define DIV '/'
+#define LP '('
+#define RP ')'
+#endif
 
+enum Type {INTEGER=100,OP_ADD,OP_SUB,OP_MULT,OP_DIV,OP_LP,OP_RP,END};
 
-struct token{
-    char type;
-    int value;
-};
-
-class lexer {
+class Token {
 public:
-    explicit lexer(const std::string &statement);
-    token* get_next_token();
-    void skip_whitespace();
-    int get_integer();
+    Token(Type type,int value):type(type),value(value){};
+    Token(Type type):type(type){};
+    int value;
+    Type type;
+};
+
+class Lexer {
+
 private:
-    const std::string &statement;
-    int pointer;
+    std::string _text;
+    int pos;
+    char current_char;
+    int length;
+
+public:
+    explicit Lexer(std::string &text);
+    Token *getNextToken();
+    int integer();
+    void skip_whitespace();
+    void advance();
+    void error();
 };
 
 
 
-
-
-#endif // LEARNING_PART_LBASC_PART6_LEXER_H_
+#endif // __SRC__PART6__LEXER_H

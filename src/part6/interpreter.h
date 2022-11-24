@@ -1,43 +1,26 @@
-/*
- *Copyright (c) 2022 All rights reserved
- *@description: header file of interpreter.cpp
- *@author: Zhixing Lu
- *@date: 2022-04-06
- *@email: luzhixing12345@163.com
- *@Github: luzhixing12345
-*/
 
-#ifndef LEARNING_PART_LBASC_PART6_INTERPRETER_H_
-#define LEARNING_PART_LBASC_PART6_INTERPRETER_H_
+#ifndef SRC_PART6_INTERPRETER_H_
+#define SRC_PART6_INTERPRETER_H_
 
-#include <iostream>
-#include <string>
+
 #include "lexer.h"
 
-class interpreter {
+class Interpreter {
 
-/* 
-    上下文无关文法:
+private:
+    Lexer *_lexer;
+    Token *current_token;
 
-    expr : term ((PLUS | MINUS) term)*
-    term : factor ((MULT | DIV) factor)*
-    factor : (PLUS | MINUS) factor | INTEGER | LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
- 
-*/
 public:
-    explicit interpreter(lexer *lexer);
+    explicit Interpreter(Lexer *lexer);
     int expr();
     int term();
     int factor();
-    void advance();
-private:
-    lexer lexer_;
-    std::string statement_;
-    token *current_token_;
+    void eat(Type type);
+    void error();
 };
 
 
 
 
-
-#endif // LEARNING_PART_LBASC_PART6_INTERPRETER_H_
+#endif // SRC_PART6_INTERPRETER_H_

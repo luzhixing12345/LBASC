@@ -1,64 +1,83 @@
-/*
- *Copyright (c) 2c22 All rights reserved
- *@description: lexer should be used for parsing the statement into tokens
- *@author: Zhixing Lu
- *@date: 2c22-c4-c6
- *@email: luzhixing12345@163.com
- *@Github: luzhixing12345
-*/
 
 #include "lexer.h"
+#include <cctype>
 
-lexer::lexer(const std::string &statement) : statement(statement), pointer(0) {}
 
-token* lexer::get_next_token() {
-    skip_whitespace();
-    //std::cout<<"pointer: "<<pointer<<std::endl;
-    if (pointer >= statement.length()) {
-        // just a placeholder, no need to do anything
-        // but it can't be nullptr
-        return new token{'\0',0};
+Lexer::Lexer(std::string &text) {
+    _text = text;
+    pos = 0;
+    current_char = _text[pos];
+    length = text.length();
+}
+
+Token *Lexer::getNextToken() {
+    Token *token;
+    while (pos!=-1) {
+        if (current_char == SPACE) {
+            skip_whitespace();
+            continue;
+        } else if (current_char == ADD) {
+            advance();
+            token = new Token(OP_ADD);
+            return token;
+        } else if (current_char == SUB) {
+            advance();
+            token = new Token(OP_SUB);
+            return token;
+        } else if (current_char == MULT) {
+            advance();
+            token = new Token(OP_MULT);
+            return token;
+        } else if (current_char == DIV) {
+            advance();
+            token = new Token(OP_DIV);
+            return token;
+        } else if (current_char == LP) {
+            advance();
+            token = new Token(OP_LP);
+            return token;
+        } else if (current_char == RP) {
+            advance();
+            token = new Token(OP_RP);
+            return token;
+        } else if (std::isdigit(current_char)) {
+            token = new Token(INTEGER,integer());
+            return token;
+        }        
+        else {
+            error();
+        }
     }
-    char c = statement[pointer];
-    switch (c) {
-        case PLUS:
-            pointer++;
-            return new token{PLUS, c};
-        case MINUS:
-            pointer++;
-            return new token{MINUS, c};
-        case MULT:
-            pointer++;
-            return new token{MULT, c};
-        case DIV:
-            pointer++;
-            return new token{DIV, c};
-        case LEFT_PARENTHESIS:
-            pointer++;
-            return new token{LEFT_PARENTHESIS, c};
-        case RIGHT_PARENTHESIS:
-            pointer++;
-            return new token{RIGHT_PARENTHESIS, c};
-        default:
-            //std::cout<<"pointer: "<<pointer<<std::endl;
-            return new token{INTEGER, get_integer()};
+    token = new Token(END);
+    return token;
+}
+
+int Lexer::integer() {
+    int number = 0;
+    while (pos != -1 && std::isdigit(current_char)) {
+        number = number * 10 + current_char - '0';
+        advance();
+    }
+    // printf("number = %d\n",number);
+    return number;
+}
+
+void Lexer::skip_whitespace() {
+    while (pos != -1 && current_char == SPACE) {
+        advance();
     }
 }
 
-int lexer::get_integer() {
-    int result = 0;
-    //std::cout<<"pointer_before: "<<pointer<<std::endl;
-    while (pointer < statement.length() && isdigit(statement[pointer])) {
-        result = result * 10 + statement[pointer] - '0';
-        pointer++;
+void Lexer::advance() {
+    pos++;
+    if (pos > length-1) {
+        pos = -1;
+    } else {
+        current_char = _text[pos];
     }
-    //std::cout<<"pointer_after: "<<pointer<<std::endl;
-    return result;
 }
 
-void lexer::skip_whitespace() {
-    while (pointer < statement.length() && isspace(statement[pointer])) {
-        //std::cout<<"skip_whitespace"<<std::endl;
-        pointer++;
-    }
+void Lexer::error() {
+    printf("[error]");
+    exit(0);
 }
