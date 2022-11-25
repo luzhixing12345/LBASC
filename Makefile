@@ -34,3 +34,6 @@ part9:
 
 part10:
 	@python src/part10/calc.py src/part10/test.pas
+
+part11:
+	@python src/part11/calc.py src/part11/test.pas
