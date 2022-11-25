@@ -26,6 +26,9 @@ class Interpreter_infix2suffix(NodeVisitor):
     def visit_Num(self, node):
         return node.value
 
+    def visit_Bracket(self,node):
+        return f'({self.visit(node.expr)})'
+
     def interpret(self):
         tree = self.parser.parse()
         return self.visit(tree)
@@ -39,6 +42,9 @@ class Interpreter_infix2prefix(NodeVisitor):
 
     def visit_Num(self, node:Num):
         return node.value
+    
+    def visit_Bracket(self,node):
+        return f'({self.visit(node.expr)})'
 
     def interpret(self):
         tree = self.parser.parse()

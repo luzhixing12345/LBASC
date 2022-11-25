@@ -24,8 +24,10 @@ part6:
 	@python test.py $@
 
 part7:
-	$(MAKE) -C src/part7
 	@python test.py $@
 
 part8:
 	@python test.py $@
+
+part9:
+	@python src/part9/calc.py

@@ -133,6 +133,12 @@ class Num(AST):
         self.value = token.value
 
 
+class Bracket(AST):
+    
+    def __init__(self,node):
+        self.expr = node
+
+
 class Parser(object):
     def __init__(self, lexer):
         self.lexer = lexer
@@ -162,7 +168,7 @@ class Parser(object):
             self.eat(LPAREN)
             node = self.expr()
             self.eat(RPAREN)
-            return node
+            return Bracket(node)
 
     def term(self):
         """term : factor ((MUL | DIV) factor)*"""

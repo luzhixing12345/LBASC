@@ -4,6 +4,11 @@ INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF = (
     'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', '(', ')', 'EOF'
 )
 SEMI = 'SEMI'
+DOT = 'DOT'
+BEGIN = 'BEGIN'
+END = 'END'
+ID = 'ID'
+ASSIGN = 'ASSIGN'
 
 class Token(object):
     def __init__(self, type, value):
@@ -26,13 +31,21 @@ class Token(object):
         return self.__str__()
 
 
+RESERVED_KEYWORDS = {
+    'BEGIN': Token('BEGIN', 'BEGIN'),
+    'END': Token('END', 'END'),
+    'DIV': Token(DIV,'/')
+}
+
+
+
 class Lexer(object):
     def __init__(self, text):
         # client string input, e.g. "4 + 2 * 3 - 6 / 2"
         self.text = text
         # self.pos is an index into self.text
         self.pos = 0
-        self.current_char = self.text[self.pos]
+        self.current_char:str = self.text[self.pos]
 
     def error(self):
         raise Exception('Invalid character')
@@ -57,20 +70,52 @@ class Lexer(object):
             self.advance()
         return int(result)
 
+    def peek(self):
+        peek_pos = self.pos+1
+        if peek_pos > len(self.text)-1:
+            return None
+        else:
+            return self.text[peek_pos]
+        
+    def _id(self):
+        """Handle identifiers and reserved keywords"""
+        result = ''
+        while self.current_char is not None and (self.current_char.isalnum() or self.current_char == '_'):
+            result += self.current_char
+            self.advance()
+        result = result.upper()
+        token = RESERVED_KEYWORDS.get(result, Token(ID, result))
+        return token
+        
+        
     def get_next_token(self):
         """Lexical analyzer (also known as scanner or tokenizer)
         This method is responsible for breaking a sentence
         apart into tokens. One token at a time.
         """
         while self.current_char is not None:
-
             if self.current_char.isspace():
+                # include '\n'
                 self.skip_whitespace()
                 continue
+            
+            if self.current_char.isalpha() or self.current_char == '_':
+                return self._id()
+            
+            if self.current_char == ':' and self.peek() == '=':
+                self.advance()
+                self.advance()
+                return Token(ASSIGN, ':=')
+            if self.current_char == ';':
+                self.advance()
+                return Token(SEMI, ';')
+            if self.current_char == '.':
+                self.advance()
+                return Token(DOT, '.')
 
             if self.current_char.isdigit():
                 return Token(INTEGER, self.integer())
-
+            
             if self.current_char == '+':
                 self.advance()
                 return Token(PLUS, '+')
@@ -83,9 +128,9 @@ class Lexer(object):
                 self.advance()
                 return Token(MUL, '*')
 
-            if self.current_char == '/':
-                self.advance()
-                return Token(DIV, '/')
+            # if self.current_char == '/':
+            #     self.advance()
+            #     return Token(DIV, '/')
 
             if self.current_char == '(':
                 self.advance()
@@ -94,7 +139,7 @@ class Lexer(object):
             if self.current_char == ')':
                 self.advance()
                 return Token(RPAREN, ')')
-
+            
             self.error()
 
         return Token(EOF, None)
@@ -127,9 +172,30 @@ class Num(AST):
         self.token = token
         self.value = token.value
 
+class Compound(AST):
+    """Represents a 'BEGIN ... END' block"""
+    def __init__(self):
+        self.children = []
+
+class Assign(AST):
+    def __init__(self, left, op, right):
+        self.left = left
+        self.token = self.op = op
+        self.right = right
+
+
+class Var(AST):
+    """The Var node is constructed out of ID token."""
+    def __init__(self, token):
+        self.token = token
+        self.value = token.value
+        
+class NoOp(AST):
+    pass
+
 
 class Parser(object):
-    def __init__(self, lexer):
+    def __init__(self, lexer:Lexer):
         self.lexer = lexer
         # set current token to the first token taken from the input
         self.current_token = self.lexer.get_next_token()
@@ -147,26 +213,96 @@ class Parser(object):
         else:
             self.error()
 
-    def factor(self):
-        """factor : INTEGER | LPAREN expr RPAREN"""
-        token = self.current_token
-        if token.type == INTEGER:
-            self.eat(INTEGER)
-            return Num(token)
-        elif token.type == LPAREN:
-            self.eat(LPAREN)
-            node = self.expr()
-            self.eat(RPAREN)
-            return node
-        elif token.type == MINUS:
-            self.eat(MINUS)
-            return UnaryOp(op=token, expr=self.factor())
-        elif token.type == PLUS:
-            self.eat(PLUS)
-            return UnaryOp(op=token, expr=self.factor())
-        else:
-            self.error()
+    def program(self):
+        """
+        program : compound_statement DOT
+        """
+        node = self.compound_statement()
+        self.eat(DOT)
+        return node
+    
+    def compound_statement(self):
+        """
+        compound_statement : BEGIN statment_list END
+        """
+        
+        self.eat(BEGIN)
+        nodes = self.statement_list()
+        self.eat(END)
+        
+        root = Compound()
+        for node in nodes:
+            root.children.append(node)
 
+        return root
+    
+    def statement_list(self):
+        """
+        statement_list : statement
+                       | statement SEMI statement_list
+        """
+        node = self.statement()
+        
+        results = [node]
+        while self.current_token.type == SEMI:
+            self.eat(SEMI)
+            results.append(self.statement())
+            
+        return results
+
+    def statement(self):
+        """
+        statement : compound_statement
+                  | assignment_statement
+                  | empty
+        """
+        if self.current_token.type == BEGIN:
+            node = self.compound_statement()
+        elif self.current_token.type == ID:
+            node = self.assignment_statement()
+        else:
+            node = self.empty()
+        return node
+
+    def assignment_statement(self):
+        """
+        assignment_statement : variable ASSIGN expr
+        """
+        left = self.variable()
+        token = self.current_token
+        self.eat(ASSIGN)
+        right = self.expr()
+        node = Assign(left,token,right)
+        return node
+
+    def variable(self):
+        """
+        variable : ID
+        """
+        node = Var(self.current_token)
+        self.eat(ID)
+        return node
+
+    def empty(self):
+        return NoOp()
+    
+    def expr(self):
+        """
+        expr : term ((PLUS | MINUS) term)*
+        """
+        node = self.term()
+
+        while self.current_token.type in (PLUS, MINUS):
+            token = self.current_token
+            if token.type == PLUS:
+                self.eat(PLUS)
+            elif token.type == MINUS:
+                self.eat(MINUS)
+
+            node = BinOp(left=node, op=token, right=self.term())
+
+        return node
+    
     def term(self):
         """term : factor ((MUL | DIV) factor)*"""
         node = self.factor()
@@ -182,68 +318,47 @@ class Parser(object):
 
         return node
 
-    def expr(self):
+    
+    def factor(self):
         """
-        expr   : term ((PLUS | MINUS) term)*
-        term   : factor ((MUL | DIV) factor)*
-        factor : INTEGER | LPAREN expr RPAREN
+        factor : PLUS factor
+               | MINUS factor
+               | INTEGER
+               | LPAREAN expr RPAREAN
+               | variable
         """
-        node = self.term()
-
-        while self.current_token.type in (PLUS, MINUS):
-            token = self.current_token
-            if token.type == PLUS:
-                self.eat(PLUS)
-            elif token.type == MINUS:
-                self.eat(MINUS)
-
-            node = BinOp(left=node, op=token, right=self.term())
-
-        return node
+        token:Token = self.current_token
+        if token.type == INTEGER:
+            self.eat(INTEGER)
+            return Num(token)
+        elif token.type == LPAREN:
+            self.eat(LPAREN)
+            node = self.expr()
+            self.eat(RPAREN)
+            return node
+        elif token.type == MINUS:
+            self.eat(MINUS)
+            return UnaryOp(op=token, expr=self.factor())
+        elif token.type == PLUS:
+            self.eat(PLUS)
+            return UnaryOp(op=token, expr=self.factor())
+        elif token.type == ID:
+            node = self.variable()
+            return node
+        else:
+            self.error()
 
     def parse(self):
-        return self.expr()
-
+        node = self.program()
+        if self.current_token.type != EOF:
+            self.error()
+        return node
 
 ###############################################################################
 #                                                                             #
 #  INTERPRETER                                                                #
 #                                                                             #
 ###############################################################################
-
-class NodeVisitor(object):
-    def visit(self, node):
-        # type(node).__name__ = BinOp / Num
-        method_name = 'visit_' + type(node).__name__
-        
-        # equal to use : self.visit_BinOp(node) / self.visit_Num(node)
-        visitor = getattr(self, method_name, self.generic_visit)
-        return visitor(node)
-
-    def generic_visit(self, node):
-        raise Exception('No visit_{} method'.format(type(node).__name__))
-
-
-class Interpreter(NodeVisitor):
-    def __init__(self, parser):
-        self.parser = parser
-
-    def visit_BinOp(self, node):
-        if node.op.type == PLUS:
-            return self.visit(node.left) + self.visit(node.right)
-        elif node.op.type == MINUS:
-            return self.visit(node.left) - self.visit(node.right)
-        elif node.op.type == MUL:
-            return self.visit(node.left) * self.visit(node.right)
-        elif node.op.type == DIV:
-            return self.visit(node.left) // self.visit(node.right)
-
-    def visit_Num(self, node):
-        return node.value
-
-    def interpret(self):
-        tree = self.parser.parse()
-        return self.visit(tree)
 
 class NodeVisitor(object):
     def visit(self, node):
@@ -260,8 +375,12 @@ class NodeVisitor(object):
 
 
 class Interpreter(NodeVisitor):
-    def __init__(self, parser):
+    
+    
+    def __init__(self, parser:Parser):
         self.parser = parser
+        self.GLOBAL_SCOPE = {}
+        
 
     def visit_BinOp(self, node):
         if node.op.type == PLUS:
@@ -283,38 +402,46 @@ class Interpreter(NodeVisitor):
         elif op == MINUS:
             return -self.visit(node.expr)
 
+    def visit_Compound(self,node:Compound):
+        for child in node.children:
+            self.visit(child)
+    
+    def visit_NoOp(self,node:NoOp):
+        pass
+
+    def visit_Assign(self,node:Assign):
+        var_name = node.left.value
+        self.GLOBAL_SCOPE[var_name] =  self.visit(node.right)
+
+    def visit_Var(self,node:Var):
+        var_name = node.value
+        value = self.GLOBAL_SCOPE.get(var_name)
+        if value is None:
+            raise NameError(repr(var_name))
+        else:
+            return value
+
     def interpret(self):
         tree = self.parser.parse()
+        if tree is None:
+            return ''
         return self.visit(tree)
-
-def main():
+        
+def main(text):
     
-    correctness = 0
-    cnt = 1
-    while True:
-        try:
-            text = input('calc> ')
-        except EOFError:
-            break
-        print(text)
-        if text=='END':
-            break
-        if not text:
-            continue
-        lexer = Lexer(text)
-        parser = Parser(lexer)
-        interpreter = Interpreter(parser)
-        result = interpreter.interpret()
-        
-         # print('output =',result)
-        print('output =',result,end='')
-        if cnt == result:
-            correctness+=1
-            print(f' ({chr(0x2713)})')
-        else :
-            print(f' ({chr(0x2717)})')
-        cnt+=1
-    print(f'\n{correctness}/{cnt-1}')
-        
+    lexer = Lexer(text)
+    parser = Parser(lexer)
+    interpreter = Interpreter(parser)
+    result = interpreter.interpret()
+    print(interpreter.GLOBAL_SCOPE)
+
 if __name__ == "__main__":
-    main()
+    file_name = "assignment.txt"
+    import os
+    if not os.path.exists(file_name):
+        file_name = './src/part9/assignment.txt'
+    with open(file_name,'r') as f:
+        text = f.read()
+    print(text)
+    main(text)
+    
