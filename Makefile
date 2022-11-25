@@ -30,4 +30,7 @@ part8:
 	@python test.py $@
 
 part9:
-	@python src/part9/calc.py
+	@python src/part9/calc.py src/part9/assignment.txt
+
+part10:
+	@python src/part10/calc.py src/part10/test.pas

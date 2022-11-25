@@ -6,14 +6,15 @@
 
 ## 目录
 
-- [part1](src/part1/README.md): 如何处理 `2+3`
-- [part2](src/part2/README.md): 如何处理 ` 12 + 234 `
-- [part3](src/part3/README.md): 如何处理 `12-2+8-1`,`12*2*9/3`
-- [part4](src/part4/README.md): 如何使用 上下文无关文法(BNF) 处理 `12*2*9/3`
-- [part5](src/part5/README.md): 如何处理 `12+2*9/3+1`
-- [part6](src/part6/README.md): 如何处理 `(1+2)*(3+4)`
-- [part7](src/part7/README.md): 如何使用 抽象语法树(AST) 处理 `(1+2)*(3+4)` 
-- [part8](src/part8/README.md): 如何处理 `--+-3+4`
+- [part1](src/part1): 如何处理 `2+3`
+- [part2](src/part2): 如何处理 ` 12 + 234 `
+- [part3](src/part3): 如何处理 `12-2+8-1`,`12*2*9/3`
+- [part4](src/part4): 如何使用 上下文无关文法(BNF) 处理 `12*2*9/3`
+- [part5](src/part5): 如何处理 `12+2*9/3+1`
+- [part6](src/part6): 如何处理 `(1+2)*(3+4)`
+- [part7](src/part7): 如何使用 抽象语法树(AST) 处理 `(1+2)*(3+4)` 
+- [part8](src/part8): 如何处理 `--+-3+4`
+- [part8](src/part9): 编写 Pascal 语法基础编译器
 
 ## 运行与测试
 
