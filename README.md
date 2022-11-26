@@ -17,6 +17,9 @@
 - [part9](src/part9): 编写 Pascal 语法基础编译器
 - [part10](src/part10/): 完善语法,添加对应的AST节点
 - [part11](src/part11/): 添加符号表, 属性表
+- [part12](src/part12/): 添加过程声明,引出作用域
+- [part13](src/part13/): 实现语义分析和静态语法检查
+- [part14](src/part14/): 实现作用域
 
 ## 运行与测试
 

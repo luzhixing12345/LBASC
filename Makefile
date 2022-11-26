@@ -43,3 +43,6 @@ part12:
 
 part13:
 	@python src/$@/calc.py src/$@/test.pas
+
+part14:
+	@python src/$@/calc.py src/$@/test.pas
