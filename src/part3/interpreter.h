@@ -45,11 +45,12 @@ public:
     Token *get_next_token();  // 获取下一个token
     void error();
     void eat(Type type);              // 将当前令牌类型与传递的令牌进行比较
-
     int integer();           // 获取连续数字的值
     int term();              // 获取术语
     int expr();              // 解析整个表达式
-
+    ~ Interpreter() {
+        delete current_token;
+    }
 };
 
 

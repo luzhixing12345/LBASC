@@ -18,6 +18,9 @@ public:
     int factor();
     void eat(Type type);
     void error();
+    ~ Interpreter() {
+        delete current_token;
+    }
 };
 
 

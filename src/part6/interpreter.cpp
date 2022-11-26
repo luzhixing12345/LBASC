@@ -4,20 +4,19 @@
 Interpreter::Interpreter(Lexer *lexer) {
     _lexer = lexer;
     current_token = _lexer->getNextToken();
-    // printf("init current token = %d\n",current_token->type);
 }
 
 int Interpreter::expr() {
 
     int result = term();
-    Token *token;
+    Type type;
     while(current_token->type == OP_ADD || \
         current_token->type == OP_SUB) {
-            token = current_token;
-            if (token->type == OP_ADD) {
+            type = current_token->type;
+            if (type == OP_ADD) {
                 eat(OP_ADD);
                 result = result + term();
-            } else if (token->type == OP_SUB) {
+            } else if (type == OP_SUB) {
                 eat(OP_SUB);
                 result = result - term();
             }
@@ -46,7 +45,7 @@ int Interpreter::term() {
 int Interpreter::factor() {
 
     int result;
-    Token * token  = current_token;
+    Token* token  = current_token;
     if (token->type == OP_LP) {
         eat(OP_LP);
         result = expr();
@@ -66,6 +65,7 @@ int Interpreter::factor() {
 
 void Interpreter::eat(Type type) {
     if (current_token->type == type) {
+        delete current_token;
         current_token = _lexer->getNextToken();
         // printf("current token = %d\n",current_token->type);
     } else {
