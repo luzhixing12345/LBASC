@@ -14,7 +14,9 @@
 - [part6](src/part6): 如何处理 `(1+2)*(3+4)`
 - [part7](src/part7): 如何使用 抽象语法树(AST) 处理 `(1+2)*(3+4)` 
 - [part8](src/part8): 如何处理 `--+-3+4`
-- [part8](src/part9): 编写 Pascal 语法基础编译器
+- [part9](src/part9): 编写 Pascal 语法基础编译器
+- [part10](src/part10/): 完善语法,添加对应的AST节点
+- [part11](src/part11/): 添加符号表, 属性表
 
 ## 运行与测试
 

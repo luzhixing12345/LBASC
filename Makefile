@@ -30,10 +30,13 @@ part8:
 	@python test.py $@
 
 part9:
-	@python src/part9/calc.py src/part9/assignment.txt
+	@python src/$@/calc.py src/$@/assignment.txt
 
 part10:
-	@python src/part10/calc.py src/part10/test.pas
+	@python src/$@/calc.py src/$@/test.pas
 
 part11:
-	@python src/part11/calc.py src/part11/test.pas
+	@python src/$@/calc.py src/$@/test.pas
+
+part12:
+	@python src/$@/calc.py src/$@/test.pas
