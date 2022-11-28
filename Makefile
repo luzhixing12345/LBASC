@@ -46,3 +46,16 @@ part13:
 
 part14:
 	@python src/$@/calc.py src/$@/test.pas
+
+part15:
+	-@echo "error1-----------------\n"
+	-@python src/$@/calc.py -i src/$@/error1.pas -s
+	-@echo "error2-----------------\n"
+	-@python src/$@/calc.py -i src/$@/error2.pas -s
+	-@echo "error3-----------------\n"
+	-@python src/$@/calc.py -i src/$@/error3.pas -s
+	-@echo "error4-----------------\n"
+	-@python src/$@/calc.py -i src/$@/error4.pas -s
+
+part16:
+	@python src/$@/calc.py -i src/$@/test.pas -s
