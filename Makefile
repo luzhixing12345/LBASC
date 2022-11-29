@@ -62,3 +62,9 @@ part16:
 
 part17:
 	@python src/$@/calc.py -i src/$@/test.pas --scope --stack
+
+part18:
+	@python src/$@/calc.py -i src/$@/test.pas --scope --stack
+
+part19:
+	@python src/$@/calc.py -i src/$@/test.pas --scope --stack
