@@ -1,4 +1,4 @@
-# LBASC
+# LBASI
 
 参考 [Let’s Build A Simple Interpreter](https://ruslanspivak.com/lsbasi-part1/)
 
@@ -22,10 +22,11 @@
 - [part14](src/part14/): 实现作用域
 - [part15](src/part15/): 完善错误检查和异常抛出
 - [part16](src/part16/): 添加过程调用的支持
+- [part17](src/part17/): 调用堆栈和激活记录
 
 ## 运行与测试
 
-笔者构建了一个Makefile文件和test.py脚本来辅助自动化测试,每一个阶段分别设计了一些测试用例`test-examples.txt`来检验
+笔者构建了一个Makefile文件和test.py脚本来辅助自动化测试
 
 您可使用 `make <part>` 来自动化测试,比如
 
